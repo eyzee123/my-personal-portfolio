@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import profileImg from '../assets/profile_gray.png';
 import hopeLogo from '../assets/projects/hope-logo.png';
+import retrieverLogo from '../assets/projects/retriever-logo.png';
+import forutaLogo from '../assets/projects/foruta-logo.png';
+import mentLogo from '../assets/projects/ment-logo.png';
 import { Mail, Github, Linkedin, ExternalLink, Moon, Sun, Menu, X, Code, Database, Wrench, Layout } from 'lucide-react';
 
 const Portfolio = () => {
@@ -11,6 +14,7 @@ const Portfolio = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState('All');
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [isSending, setIsSending] = useState(false);
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -39,36 +43,32 @@ const Portfolio = () => {
       description: 'Scalable Healthcare application for managing patient records, appointments, and telemedicine consultations.',
       tech: ['Angular', 'Ionic', 'Typescript', '.NET C#', 'Azure'],
       image: hopeLogo,
-      demo: 'https://demo.com',
-      categories: ['Web Apps', 'Mobile Apps']
-    },
-    {
-      title: 'Task Management API',
-      description: 'RESTful API with authentication, role-based access control, and real-time notifications.',
-      tech: ['Express', 'MongoDB', 'Redis', 'Socket.io'],
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=500&fit=crop',
-      github: 'https://github.com',
-      demo: 'https://demo.com',
-      categories: ['APIs']
-    },
-    {
-      title: 'Mobile Fitness App',
-      description: 'Cross-platform fitness tracking app with workout plans, progress charts, and social features.',
-      tech: ['React Native', 'Firebase', 'Redux', 'Expo'],
-      image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&h=500&fit=crop',
-      github: 'https://github.com',
-      demo: 'https://demo.com',
+      demo: 'https://play.google.com/store/apps/details?id=se.addimedical.hope.tempest.training&pcampaignid=web_share',
       categories: ['Mobile Apps']
     },
     {
-      title: 'Real-Time Chat Application',
-      description: 'Scalable chat platform with rooms, direct messaging, file sharing, and emoji reactions.',
-      tech: ['React', 'WebSocket', 'Node.js', 'Docker'],
-      image: 'https://images.unsplash.com/photo-1611606063065-ee7946f0787a?w=800&h=500&fit=crop',
-      github: 'https://github.com',
-      demo: 'https://demo.com',
-      categories: ['Web Apps', 'APIs']
-    }
+      title: 'HOPE Practitioner(Web)',
+      description: 'Scalable Healthcare application for managing patient records, appointments, and telemedicine consultations.',
+      tech: ['Angular', 'Typescript', '.NET C#', 'Azure'],
+      image: hopeLogo,
+      demo: 'https://hope01.addimedical.com/auth/login',
+      categories: ['Web Apps']
+    },
+    {
+      title: 'Retriever App',
+      description: 'Cross-platform food delivery app with real-time order tracking, payment integration, and user reviews.',
+      tech: ['React Native', 'Firebase', 'Redux', 'DragonPay API', 'Google Maps API'],
+      image: retrieverLogo,
+      github: 'https://github.com/eyzee123/retriever-customer',
+      categories: ['Mobile Apps']
+    },
+    {
+      title: 'Foruta App',
+      description: 'Cross-platform food delivery app with real-time order tracking and user reviews.',
+      tech: ['Ionic', 'Angular', 'PHP', 'MySQL', 'Google Maps API'],
+      image: forutaLogo,
+      categories: ['Mobile Apps']
+    },
   ];
 
   const skills = {
@@ -121,10 +121,33 @@ const Portfolio = () => {
     ? projects
     : projects.filter(p => p.categories.includes(activeFilter));
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert('Thank you for your message! This is a demo, so no email will be sent.');
-    setFormData({ name: '', email: '', message: '' });
+    if (isSending) return;
+    setIsSending(true);
+
+    try {
+      const res = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data?.ok) {
+        console.error('send-email failed', data);
+        alert('Sorry, something went wrong sending your message. Please try again later.');
+      } else {
+        alert('Thanks — your message was sent successfully!');
+        setFormData({ name: '', email: '', message: '' });
+      }
+    } catch (err) {
+      console.error('send-email error', err);
+      alert('Sorry, something went wrong sending your message. Please try again later.');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const scrollToSection = (id: string) => {
@@ -269,8 +292,8 @@ const Portfolio = () => {
               I specialize in modern JavaScript frameworks and love turning complex problems into elegant, user-friendly solutions.
             </p>
             <p className={`text-lg ${darkMode ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
-              My expertise spans from crafting responsive frontends with React and Next.js to architecting robust backend systems 
-              with Node.js and PostgreSQL. I'm constantly learning and staying up-to-date with the latest technologies to deliver 
+              My expertise spans from crafting responsive frontends with Angular, React and Next.js to architecting robust backend systems 
+              with Node.js, .NET C#, MySQL, PostgreSQL and Firebase. I'm constantly learning and staying up-to-date with the latest technologies to deliver 
               the best solutions for my clients and users.
             </p>
           </div>
@@ -367,13 +390,15 @@ const Portfolio = () => {
                       Code
                     </a>
                     }
-                    <a
+                    { project.demo &&
+                    <a 
                       href={project.demo}
                       className="flex items-center gap-2 text-purple-500 hover:text-purple-400 transition-colors"
                     >
                       <ExternalLink size={20} />
                       Demo
                     </a>
+                    }
                   </div>
                 </div>
               </div>
@@ -414,7 +439,7 @@ const Portfolio = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="section-contact" className={`py-20 px-4 ${darkMode ? 'bg-gray-800/50' : 'bg-white'}`}>
+      {/* <section id="section-contact" className={`py-20 px-4 ${darkMode ? 'bg-gray-800/50' : 'bg-white'}`}>
         <div className="max-w-2xl mx-auto">
           <h2 className="text-4xl font-bold mb-8 text-center">Get In Touch</h2>
           <form onSubmit={handleSubmit} className={`${darkMode ? 'bg-gray-800' : 'bg-gray-50'} rounded-2xl p-8 ${isVisible['section-contact'] ? 'animate-slideUp' : 'opacity-0'}`}>
@@ -453,9 +478,10 @@ const Portfolio = () => {
             </div>
             <button
               type="submit"
-              className="w-full px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all"
+              disabled={isSending}
+              className={`w-full px-8 py-3 rounded-lg font-semibold transition-all ${isSending ? 'opacity-60 cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-lg hover:scale-105'}`}
             >
-              Send Message
+              {isSending ? 'Sending...' : 'Send Message'}
             </button>
           </form>
 
@@ -471,7 +497,7 @@ const Portfolio = () => {
             </a>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Footer */}
       <footer className={`py-8 px-4 border-t ${darkMode ? 'border-gray-800 bg-gray-900' : 'border-gray-200 bg-white'}`}>

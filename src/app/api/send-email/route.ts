@@ -11,7 +11,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, error: 'Missing required fields' }, { status: 400 });
     }
 
-    const apiKey = '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';
+    const apiKey =  process.env.SENDGRID_API_KEY;
     const to = process.env.EMAIL_TO || process.env.SENDGRID_TO;
     const from = process.env.SENDGRID_FROM || process.env.EMAIL_FROM || process.env.SENDGRID_TO || process.env.EMAIL_TO;
 

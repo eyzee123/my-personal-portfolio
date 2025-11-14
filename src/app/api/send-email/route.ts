@@ -21,7 +21,6 @@ export async function POST(request: Request) {
 
     sgMail.setApiKey(apiKey);
 
-    // Use the configured/verified sender as the `from` address and set replyTo to the user's email.
     const msg = {
       to,
       from,

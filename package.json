@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "@google/genai": "^1.29.1",
+    "@google/generative-ai": "^0.24.1",
     "@sendgrid/mail": "^8.1.6",
     "@supabase/supabase-js": "^2.81.1",
+    "axios": "^1.13.2",
+    "cheerio": "^1.1.2",
     "lucide-react": "^0.553.0",
     "next": "16.0.1",
     "react": "19.2.0",
@@ -19,12 +22,13 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^20.19.25",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

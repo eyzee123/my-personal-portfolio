@@ -24,9 +24,17 @@ import {
   Phone,
   MapPin,
   Building,
+  MessageCircle,
+  Send,
 } from "lucide-react";
 
+interface Message {
+  role: "user" | "assistant";
+  text: string;
+}
+
 const Portfolio = () => {
+  const [open, setOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("All");
@@ -39,22 +47,27 @@ const Portfolio = () => {
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
 
   //AI-Assitant states
-  const [query, setQuery] = useState("");
-  const [response, setResponse] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
 
-  const handleAsk = async () => {
-    try {
-      const res = await fetch("/api/ai-assistant", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: query }),
-      });
-      const data = await res.json();
-      setResponse(data.answer);
-    } catch (error) {
-      console.error("ai-assistant error", error);
-    }
-  };
+  async function sendMessage() {
+    if (!input.trim()) return;
+
+    const userMsg: Message = { role: "user", text: input };
+    setMessages((prev) => [...prev, userMsg]);
+
+    const res = await fetch("/api/ai-assistant", {
+      method: "POST",
+      body: JSON.stringify({ query: input }),
+    });
+
+    const data = await res.json();
+
+    const aiMsg: Message = { role: "assistant", text: data.answer };
+    setMessages((prev) => [...prev, aiMsg]);
+
+    setInput("");
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -798,31 +811,79 @@ const Portfolio = () => {
       </section>
 
       {/* Ask Section */}
-      {/* <section
-        id="section-ask"
-        className={`py-20 px-4 ${darkMode ? "bg-gray-800/50" : "bg-white"}`}
-      >
-        <div className="max-w-full mx-auto">
-          <h2 className="text-4xl font-bold mb-8 text-center">Ask About Me</h2>
+      <div className="fixed bottom-6 right-6 z-50">
+        {/* Chat Window */}
+        {open && (
+          <div className="mb-4 w-96 h-[500px] bg-gray-800 rounded-lg shadow-2xl flex flex-col overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <MessageCircle className="w-6 h-6" />
+                <span className="font-semibold ">Chat Support</span>
+              </div>
+              <button
+                onClick={() => setOpen(false)}
+                className="hover:bg-gray-800 rounded-full p-1 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-          <div className="p-4 border rounded max-w-lg mx-auto">
-            <input
-              type="text"
-              placeholder="Ask me about my portfolio..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="border p-2 w-full mb-2"
-            />
-            <button
-              onClick={handleAsk}
-              className="bg-blue-500 text-white p-2 rounded"
-            >
-              Ask
-            </button>
-            <div className="mt-4 p-2 border rounded">{response}</div>
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-800">
+              {messages.map((message,i) => (
+                <div
+                  key={i}
+                  className={`flex ${
+                    message.role === "user" ? "justify-end" : "justify-start"
+                  }`}
+                >
+                  <div
+                    className={`max-w-[75%] rounded-lg p-3 ${
+                      message.role === "user"
+                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
+                        : 'bg-gray-700 text-gray-100 border border-gray-600'
+                    }`}
+                  >
+                    {message.text}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Input */}
+            <div className="p-4 bg-gray-900 border-t border-gray-700">
+              <div className="flex gap-2">
+                <input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ask me anything..."
+                  onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                  className="flex-1 border border-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white-500"
+                />
+                <button
+                  onClick={sendMessage}
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 transition-colors"
+                >
+                  <Send className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </section> */}
+        )}
+
+        {/* Floating Button */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full p-4 shadow-lg hover:bg-blue-700 transition-all hover:scale-110"
+        >
+          {open ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <MessageCircle className="w-6 h-6" />
+          )}
+        </button>
+      </div>
 
       {/* Footer */}
       <footer

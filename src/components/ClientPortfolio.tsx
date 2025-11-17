@@ -38,6 +38,24 @@ const Portfolio = () => {
   const [isSending, setIsSending] = useState(false);
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
 
+  //AI-Assitant states
+  const [query, setQuery] = useState("");
+  const [response, setResponse] = useState("");
+
+  const handleAsk = async () => {
+    try {
+      const res = await fetch("/api/ai-assistant", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: query }),
+      });
+      const data = await res.json();
+      setResponse(data.answer);
+    } catch (error) {
+      console.error("ai-assistant error", error);
+    }
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -778,6 +796,33 @@ const Portfolio = () => {
           </div>
         </div>
       </section>
+
+      {/* Ask Section */}
+      {/* <section
+        id="section-ask"
+        className={`py-20 px-4 ${darkMode ? "bg-gray-800/50" : "bg-white"}`}
+      >
+        <div className="max-w-full mx-auto">
+          <h2 className="text-4xl font-bold mb-8 text-center">Ask About Me</h2>
+
+          <div className="p-4 border rounded max-w-lg mx-auto">
+            <input
+              type="text"
+              placeholder="Ask me about my portfolio..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="border p-2 w-full mb-2"
+            />
+            <button
+              onClick={handleAsk}
+              className="bg-blue-500 text-white p-2 rounded"
+            >
+              Ask
+            </button>
+            <div className="mt-4 p-2 border rounded">{response}</div>
+          </div>
+        </div>
+      </section> */}
 
       {/* Footer */}
       <footer

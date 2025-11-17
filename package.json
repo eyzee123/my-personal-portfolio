@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google/genai": "^1.29.1",
     "@sendgrid/mail": "^8.1.6",
+    "@supabase/supabase-js": "^2.81.1",
     "lucide-react": "^0.553.0",
     "next": "16.0.1",
     "react": "19.2.0",

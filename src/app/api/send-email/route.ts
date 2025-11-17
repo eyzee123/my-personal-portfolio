@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     }
 
     sgMail.setApiKey(apiKey);
-
+    console.log("sendgrid api key:", apiKey);
     const msg = {
       to,
       from,

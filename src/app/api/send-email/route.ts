@@ -24,25 +24,23 @@ export async function POST(request: Request) {
     const msg = {
       to,
       from,
+      replyTo: email,
       subject: `Portfolio contact form: ${name}`,
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
       html: `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong></p><p>${message.replace(/\n/g, '<br/>')}</p>`,
+      
     } as any;
-
     try {
       const response = await sgMail.send(msg);
       return NextResponse.json({ ok: true });
     } catch (sendErr: any) {
       // SendGrid errors sometimes include a response body with details. Log it server-side for debugging.
-      console.error('SendGrid send error:', sendErr?.message || sendErr);
       if (sendErr?.response?.body) {
-        console.error('SendGrid response body:', sendErr.response.body);
       }
       // Return a generic error to the client to avoid leaking internal details or secrets.
       return NextResponse.json({ ok: false, error: 'Failed to send email' }, { status: 502 });
     }
   } catch (err: any) {
-    console.error('send-email (sendgrid) error:', err);
     return NextResponse.json({ ok: false, error: err?.message || String(err) }, { status: 500 });
   }
 }

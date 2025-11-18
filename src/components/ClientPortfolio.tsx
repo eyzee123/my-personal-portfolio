@@ -7,6 +7,7 @@ import hopeLogo from "../assets/projects/hope-logo.png";
 import retrieverLogo from "../assets/projects/retriever-logo.png";
 import forutaLogo from "../assets/projects/foruta-logo.png";
 import mentLogo from "../assets/projects/ment-logo.png";
+import portfolioImage from "../assets/projects/portfolio.png";
 import {
   Mail,
   Github,
@@ -91,11 +92,30 @@ const Portfolio = () => {
 
   const projects = [
     {
+      title: "Portfolio Website",
+      description:
+        "A modern, responsive personal portfolio built using Next.js, Tailwind CSS, and TypeScript. The website showcases my skills, experience, and featured projects with a clean UI and smooth animations. It includes an AI-powered chat assistant, dynamic typing effects, and interactive components to enhance user engagement. Deployed on Vercel with optimized performance, SEO-friendly structure, and mobile compatibility.",
+      tech: [
+        "React/Next.js",
+        "Tailwind CSS",
+        "Typescript",
+        "Gemini",
+        "Sendgrid",
+        "Vercel",
+        "Render",
+      ],
+      image: portfolioImage,
+      github: "https://github.com/eyzee123/my-personal-portfolio",
+      demo: "https://my-personal-portfolio-two-beta.vercel.app/",
+      categories: ["Web Apps"],
+    },
+    {
       title: "HOPE App",
       description:
         "Scalable Healthcare application for managing patient records, appointments, and telemedicine consultations.",
       tech: ["Angular", "Ionic", "Typescript", ".NET C#", "Azure"],
       image: hopeLogo,
+      imageFit: "object-contain",
       demo: "https://play.google.com/store/apps/details?id=se.addimedical.hope.tempest.training&pcampaignid=web_share",
       categories: ["Mobile Apps"],
     },
@@ -105,6 +125,7 @@ const Portfolio = () => {
         "Scalable Healthcare application for managing patient records, appointments, and telemedicine consultations.",
       tech: ["Angular", "Typescript", ".NET C#", "Azure"],
       image: hopeLogo,
+      imageFit: "object-contain",
       demo: "https://hope01.addimedical.com/auth/login",
       categories: ["Web Apps"],
     },
@@ -551,13 +572,13 @@ const Portfolio = () => {
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-48 object-cover"
+                    className={`w-full h-48 ${project.imageFit || "object-cover"}`}
                   />
                 ) : (
                   <Image
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-48 object-cover"
+                    className={`w-full h-48 ${project.imageFit || "object-cover"}`}
                   />
                 )}
                 <div className="p-6">
@@ -662,7 +683,7 @@ const Portfolio = () => {
       >
         <div className="max-w-full mx-auto">
           <h2 className="text-4xl font-bold mb-8 text-center">Get In Touch</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div
               className={`${
                 darkMode ? "bg-gray-800" : "bg-gray-50"
@@ -680,40 +701,44 @@ const Portfolio = () => {
                     <Mail size={24} />
                   </a>
                   <div className="flex-1">
-                    <p className="block mb-2 font-semibold">Email</p>
-                    <p className="text-gray-400">{contactData.email}</p>
+                    <p className="block mb-1 font-semibold">Email</p>
+                    <p className="text-gray-400 text-sm">{contactData.email}</p>
                   </div>
                 </div>
 
                 {/* Phone */}
                 <div className="flex items-start gap-4">
                   <a
-                    href="mailto:bejayguibao11@gmail.com"
+                    href="tel:+63XXXXXXXXX"
                     className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full hover:scale-110 transition-transform"
                   >
                     <Phone size={24} />
                   </a>
                   <div className="flex-1">
-                    <p className="block mb-2 font-semibold">Phone</p>
-                    <p className="text-gray-400">{contactData.phone}</p>
+                    <p className="block mb-1 font-semibold">Phone</p>
+                    <p className="text-gray-400 text-sm">{contactData.phone}</p>
                   </div>
                 </div>
 
                 {/* Address */}
                 <div className="flex items-start gap-4">
                   <a
-                    href="mailto:bejayguibao11@gmail.com"
+                    href="#"
                     className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full hover:scale-110 transition-transform"
                   >
                     <MapPin size={24} />
                   </a>
                   <div className="flex-1">
-                    <p className="block mb-2 font-semibold">Address</p>
-                    <p className="text-gray-400">{contactData.address}</p>
+                    <p className="block mb-1 font-semibold">Address</p>
+                    <p className="text-gray-400 text-sm">
+                      {contactData.address}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* Form */}
             <form
               onSubmit={handleSubmit}
               className={`${
@@ -735,10 +760,11 @@ const Portfolio = () => {
                     darkMode
                       ? "bg-gray-700 border-gray-600"
                       : "bg-white border-gray-300"
-                  } border focus:border-blue-500 focus:outline-none transition-colors`}
+                  } border focus:border-blue-500 focus:outline-none transition-all`}
                   placeholder="Your name"
                 />
               </div>
+
               <div className="mb-6">
                 <label className="block mb-2 font-semibold">Email</label>
                 <input
@@ -752,10 +778,11 @@ const Portfolio = () => {
                     darkMode
                       ? "bg-gray-700 border-gray-600"
                       : "bg-white border-gray-300"
-                  } border focus:border-blue-500 focus:outline-none transition-colors`}
+                  } border focus:border-blue-500 focus:outline-none transition-all`}
                   placeholder="your.email@example.com"
                 />
               </div>
+
               <div className="mb-6">
                 <label className="block mb-2 font-semibold">Message</label>
                 <textarea
@@ -769,10 +796,11 @@ const Portfolio = () => {
                     darkMode
                       ? "bg-gray-700 border-gray-600"
                       : "bg-white border-gray-300"
-                  } border focus:border-blue-500 focus:outline-none transition-colors`}
+                  } border focus:border-blue-500 focus:outline-none transition-all`}
                   placeholder="Your message..."
                 />
               </div>
+
               <button
                 type="submit"
                 disabled={isSending}
@@ -787,7 +815,8 @@ const Portfolio = () => {
             </form>
           </div>
 
-          <div className="flex justify-center gap-6 mt-8">
+          {/* Social Icons */}
+          <div className="flex justify-center gap-6 mt-10">
             <a
               href="mailto:bejayguibao11@gmail.com"
               className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full hover:scale-110 transition-transform"
@@ -819,7 +848,7 @@ const Portfolio = () => {
             <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <MessageCircle className="w-6 h-6" />
-                <span className="font-semibold ">Chat Support</span>
+                <span className="font-semibold ">AI Chat Support</span>
               </div>
               <button
                 onClick={() => setOpen(false)}
@@ -831,7 +860,7 @@ const Portfolio = () => {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-800">
-              {messages.map((message,i) => (
+              {messages.map((message, i) => (
                 <div
                   key={i}
                   className={`flex ${
@@ -841,8 +870,8 @@ const Portfolio = () => {
                   <div
                     className={`max-w-[75%] rounded-lg p-3 ${
                       message.role === "user"
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
-                        : 'bg-gray-700 text-gray-100 border border-gray-600'
+                        ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+                        : "bg-gray-700 text-gray-100 border border-gray-600"
                     }`}
                   >
                     {message.text}
@@ -857,7 +886,7 @@ const Portfolio = () => {
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask me anything..."
+                  placeholder="Ask anything about me..."
                   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                   className="flex-1 border border-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white-500"
                 />
